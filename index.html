@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>東京五日 · October 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+TC:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --p:    #f4efe6;   /* paper */
+  --p2:   #ece4d4;   /* paper warm */
+  --p3:   #e0d5c2;   /* paper dark */
+  --ink:  #18160f;
+  --mid:  #4a4035;
+  --lt:   #7a6e5c;
+  --brd:  rgba(24,22,15,.1);
+
+  /* day accents */
+  --d0: #7a6e5c;   /* arrival — sepia */
+  --d1: #7a3518;   /* D1 — deep rust */
+  --d2: #35522a;   /* D2 — forest */
+  --d3: #1a3a5c;   /* D3 — indigo */
+  --d4: #5c3a1a;   /* D4 — umber */
+}
+
+/* ── RESET ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
+body { background:var(--p); color:var(--ink); font-family:'Cormorant Garamond','Noto Serif TC',serif; line-height:1.65; -webkit-font-smoothing:antialiased; }
+
+/* ── PROGRESS ── */
+#bar { position:fixed; top:0; left:0; height:2px; background:var(--d1); transform-origin:left; transform:scaleX(0); transition:transform .08s linear; z-index:999; }
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(244,239,230,.94); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--brd);
+  padding:.75rem 3rem;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo { font-family:'Shippori Mincho',serif; font-size:.95rem; letter-spacing:.06em; color:var(--mid); }
+.nav-links { display:flex; gap:1.5rem; }
+.nav-links a {
+  color:var(--lt); text-decoration:none;
+  font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+  padding:.25rem 0; border-bottom:1.5px solid transparent;
+  transition:color .2s, border-color .2s;
+}
+.nav-links a:hover, .nav-links a.on { color:var(--ink); border-color:var(--ink); }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh; display:grid; grid-template-rows:1fr auto;
+  padding:7rem 4rem 3rem;
+  position:relative; overflow:hidden;
+}
+.hero-main { display:flex; flex-direction:column; justify-content:flex-end; }
+.hero-eyebrow {
+  font-size:.65rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--lt); margin-bottom:2rem;
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+}
+.hero h1 {
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(4rem,11vw,9rem);
+  font-weight:700; line-height:.88;
+  letter-spacing:-.03em; color:var(--ink);
+}
+.hero-en {
+  display:block;
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(.9rem,2vw,1.4rem); font-weight:300;
+  color:var(--lt); letter-spacing:.12em;
+  margin-top:1.2rem;
+}
+.hero-rule { width:48px; height:2px; background:var(--d1); margin:2rem 0; }
+.hero-meta {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:1.5rem; padding-top:2rem;
+  border-top:1px solid var(--brd);
+}
+.meta-item dt { font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--lt); margin-bottom:.3rem; }
+.meta-item dd { font-size:.88rem; color:var(--mid); line-height:1.4; }
+
+/* ── DAY TABS ── */
+.day-tabs {
+  display:flex; position:sticky; top:43px; z-index:90;
+  background:var(--p); border-bottom:1px solid var(--brd);
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+}
+.day-tab {
+  flex:none; padding:.85rem 1.8rem; text-decoration:none;
+  font-size:.65rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--lt); border-bottom:2px solid transparent;
+  white-space:nowrap; transition:all .2s;
+}
+.day-tab:hover { color:var(--ink); }
+.day-tab[data-accent="d0"]:hover, .day-tab[data-accent="d0"].on { color:var(--d0); border-color:var(--d0); }
+.day-tab[data-accent="d1"]:hover, .day-tab[data-accent="d1"].on { color:var(--d1); border-color:var(--d1); }
+.day-tab[data-accent="d2"]:hover, .day-tab[data-accent="d2"].on { color:var(--d2); border-color:var(--d2); }
+.day-tab[data-accent="d3"]:hover, .day-tab[data-accent="d3"].on { color:var(--d3); border-color:var(--d3); }
+.day-tab[data-accent="d4"]:hover, .day-tab[data-accent="d4"].on { color:var(--d4); border-color:var(--d4); }
+
+/* ── DAY SECTION ── */
+.day-section { border-bottom:1px solid var(--brd); }
+
+.day-head {
+  padding:3rem 4rem 2rem;
+  background:var(--p2);
+  border-bottom:1px solid var(--brd);
+  display:flex; gap:2rem; align-items:flex-start;
+}
+.day-accent-bar {
+  width:3px; flex-shrink:0; margin-top:.3rem;
+  border-radius:2px; align-self:stretch; min-height:80px;
+}
+.d0-bar { background:var(--d0); }
+.d1-bar { background:var(--d1); }
+.d2-bar { background:var(--d2); }
+.d3-bar { background:var(--d3); }
+.d4-bar { background:var(--d4); }
+
+.day-head-info {}
+.day-date {
+  font-size:.62rem; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--lt); margin-bottom:.6rem;
+}
+.day-title {
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(1.5rem,3.5vw,2.4rem);
+  font-weight:600; line-height:1.15; color:var(--ink);
+}
+.day-sub {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:1rem; color:var(--lt); margin-top:.4rem;
+}
+
+/* ── TIMELINE ── */
+.timeline { padding:0 4rem 4rem; max-width:820px; }
+
+/* Main stop */
+.stop {
+  display:grid; grid-template-columns:88px 1fr;
+  gap:2rem; padding:1.8rem 0;
+  border-bottom:1px solid var(--brd);
+  opacity:0; transform:translateY(12px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+.stop.vis { opacity:1; transform:none; }
+.stop:last-child { border-bottom:none; }
+
+.st { text-align:right; padding-top:.25rem; }
+.st-main {
+  display:block; font-family:'Cormorant Garamond',serif;
+  font-style:italic; font-size:1.55rem; color:var(--ink); line-height:1;
+}
+.st-end { display:block; font-size:.6rem; color:var(--lt); margin-top:.15rem; }
+
+.sb {}
+.tag {
+  display:inline-block; font-size:.56rem; letter-spacing:.18em;
+  text-transform:uppercase; border:1px solid currentColor;
+  padding:.1rem .4rem; margin-bottom:.55rem;
+  font-family:'Cormorant Garamond',serif;
+}
+.t-r { color:var(--d1); }
+.t-g { color:var(--d2); }
+.t-b { color:var(--d3); }
+.t-m { color:var(--lt); }
+.t-d { color:var(--d4); }
+
+.stop-title {
+  font-family:'Shippori Mincho',serif;
+  font-size:1.15rem; font-weight:500;
+  line-height:1.3; margin-bottom:.35rem;
+}
+.stop-title small {
+  display:block; font-family:'Cormorant Garamond',serif;
+  font-style:italic; font-weight:300;
+  font-size:.68rem; color:var(--lt);
+  margin-top:.12rem; letter-spacing:.04em;
+}
+.stop-desc { font-size:.88rem; line-height:1.9; color:var(--mid); max-width:48ch; }
+
+.note {
+  margin-top:.75rem; padding:.6rem .9rem;
+  background:var(--p3); border-left:2px solid var(--d1);
+  font-size:.76rem; color:var(--lt); line-height:1.65;
+}
+.note strong { color:var(--ink); }
+
+/* Transit row — lighter visual weight */
+.transit {
+  display:flex; align-items:center; gap:.75rem;
+  margin-top:.65rem; font-size:.72rem; color:var(--lt);
+  letter-spacing:.03em;
+}
+.transit::before { content:'↓'; color:var(--d1); flex-shrink:0; }
+
+/* Transit-only stop — more compact */
+.stop.is-transit { padding:.9rem 0; opacity:.7; }
+.stop.is-transit.vis { opacity:.7; }
+.stop.is-transit .st-main { font-size:1.1rem; color:var(--lt); }
+.stop.is-transit .stop-title { font-size:.9rem; font-family:'Cormorant Garamond',serif; font-weight:400; color:var(--lt); }
+.stop.is-transit .stop-title small { display:none; }
+.stop.is-transit .sb { display:flex; align-items:center; gap:.5rem; padding-top:.15rem; }
+.stop.is-transit .transit { margin-top:0; }
+.stop.is-transit .tag { display:none; }
+
+/* ── DISNEY CARD ── */
+.disney-wrap { padding:4rem; display:flex; justify-content:center; }
+.disney-card {
+  max-width:480px; width:100%;
+  border:1px solid var(--brd); padding:2.5rem 3rem;
+  background:var(--p2); text-align:center;
+}
+.disney-icon { font-size:2.8rem; margin-bottom:1.2rem; opacity:.75; }
+.disney-h { font-family:'Shippori Mincho',serif; font-size:1.4rem; font-weight:500; margin-bottom:.8rem; }
+.disney-p { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:.95rem; color:var(--lt); line-height:1.9; }
+.disney-sep { margin:1.8rem auto; width:1px; height:32px; background:linear-gradient(to bottom, var(--brd), transparent); }
+.disney-solo-label { font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; color:var(--d3); margin-bottom:.4rem; }
+.disney-solo-h { font-family:'Shippori Mincho',serif; font-size:1.05rem; color:var(--mid); }
+
+/* ── FOOTER ── */
+footer {
+  padding:2.5rem 4rem;
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid var(--brd);
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:.8rem; color:var(--lt);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width:768px) {
+  nav { padding:.7rem 1.2rem; }
+  .nav-logo { font-size:.85rem; }
+  .hero { padding:6rem 1.5rem 2.5rem; }
+  .hero-meta { grid-template-columns:1fr 1fr; gap:1rem; }
+  .day-head { padding:2rem 1.5rem 1.5rem; }
+  .timeline { padding:0 1.5rem 3rem; }
+  .stop { grid-template-columns:72px 1fr; gap:1.2rem; }
+  .disney-wrap { padding:2rem 1.5rem; }
+  footer { padding:2rem 1.5rem; flex-direction:column; gap:.8rem; text-align:center; }
+}
+
+/* ── ENTRANCE ── */
+@keyframes fup { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+.hero-eyebrow { animation:fup .7s .15s both; }
+.hero h1      { animation:fup .7s .3s both; }
+.hero-rule    { animation:fup .5s .5s both; }
+.hero-meta    { animation:fup .7s .55s both; }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<nav>
+  <span class="nav-logo">東京五日</span>
+  <div class="nav-links">
+    <a href="#d0" data-s="d0">10.17</a>
+    <a href="#d1" data-s="d1">10.18</a>
+    <a href="#d2" data-s="d2">10.19</a>
+    <a href="#d3" data-s="d3">10.20</a>
+    <a href="#d4" data-s="d4">10.21</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-main">
+    <div class="hero-eyebrow">APA Asakusabashi · Sheraton Grande Tokyo Bay · October 2026</div>
+    <h1>東京<br>五日<span class="hero-en">Tōkyō · Five Days · October 2026</span></h1>
+    <div class="hero-rule"></div>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item"><dt>抵達</dt><dd>10.17（六）<br>成田 18:35</dd></div>
+    <div class="meta-item"><dt>同行</dt><dd>二人行<br>妹 10.18 羽田抵</dd></div>
+    <div class="meta-item"><dt>住宿</dt><dd>APA淺草橋<br>喜來登舞濱</dd></div>
+    <div class="meta-item"><dt>回程</dt><dd>10.21（三）<br>成田 14:30</dd></div>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="day-tabs">
+  <a href="#d0" class="day-tab" data-accent="d0">0 · 10.17 抵達</a>
+  <a href="#d1" class="day-tab" data-accent="d1">I · 10.18 文京</a>
+  <a href="#d2" class="day-tab" data-accent="d2">II · 10.19 下町</a>
+  <a href="#d3" class="day-tab" data-accent="d3">III · 10.20 Disney</a>
+  <a href="#d4" class="day-tab" data-accent="d4">IV · 10.21 回程</a>
+</div>
+
+<!-- ═══ D0 ═══ -->
+<section class="day-section" id="d0">
+  <div class="day-head">
+    <div class="day-accent-bar d0-bar"></div>
+    <div class="day-head-info">
+      <div class="day-date">2026.10.17 Saturday</div>
+      <h2 class="day-title">抵達東京</h2>
+      <div class="day-sub">成田入境、淺草橋落腳、獨自的第一晚</div>
+    </div>
+  </div>
+  <div class="timeline">
+
+    <div class="stop" data-i="0">
+      <div class="st"><span class="st-main">18:35</span></div>
+      <div class="sb">
+        <span class="tag t-m">Arrival</span>
+        <h3 class="stop-title">成田機場抵達<small>Narita International Airport · NRT</small></h3>
+        <p class="stop-desc">TPE 14:25出發，NRT 18:35落地。入境、取行李，搭N'EX前往淺草橋。</p>
+        <div class="transit">成田 N'EX → 東京站，轉總武線至淺草橋　約90分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="1">
+      <div class="st"><span class="st-main">20:00</span></div>
+      <div class="sb">
+        <span class="tag t-m">Check-in</span>
+        <h3 class="stop-title">APA Hotel No.232 Asakusabashi Ekikita<small>淺草橋站北 · Check-in</small></h3>
+        <p class="stop-desc">放下行李，整頓狀態。妹妹明早才抵達，今晚是獨自的一晚。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="2">
+      <div class="st"><span class="st-main">20:30</span><span class="st-end">onwards</span></div>
+      <div class="sb">
+        <span class="tag t-m">Dinner</span>
+        <h3 class="stop-title">淺草橋周邊晚餐<small>Asakusabashi · First Night</small></h3>
+        <p class="stop-desc">不必刻意安排。淺草橋一帶有居酒屋與定食屋，或是往淺草方向步行15分鐘找一盞燈坐下來——抵達的第一晚，吃什麼都是對的。</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ D1 ═══ -->
+<section class="day-section" id="d1">
+  <div class="day-head">
+    <div class="day-accent-bar d1-bar"></div>
+    <div class="day-head-info">
+      <div class="day-date">2026.10.18 Sunday · 文京・上野・銀座</div>
+      <h2 class="day-title">文京 × 銀座</h2>
+      <div class="day-sub">帝大の食堂、江戶の絵画、資生堂の食卓</div>
+    </div>
+  </div>
+  <div class="timeline">
+
+    <div class="stop" data-i="0">
+      <div class="st"><span class="st-main">04:25</span></div>
+      <div class="sb">
+        <span class="tag t-m">Arrival</span>
+        <h3 class="stop-title">旅伴抵達羽田<small>Haneda Airport · HND · 04:25</small></h3>
+        <p class="stop-desc">TPE 00:30出發，HND 04:25落地。出關後搭京急線前往淺草橋。</p>
+        <div class="transit">HND 05:25出發 → 京急線至泉岳寺，轉都營淺草線至淺草橋　06:22抵達</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="1">
+      <div class="st"><span class="st-main">07:00</span></div>
+      <div class="sb">
+        <span class="tag t-m">Breakfast</span>
+        <h3 class="stop-title">APA早餐・會合<small>APA Hotel · 07:00–09:30</small></h3>
+        <p class="stop-desc">兩人在APA早餐廳會合，吃完後妹去補眠。</p>
+      </div>
+    </div>
+
+    <div class="stop is-transit" data-i="2">
+      <div class="st"><span class="st-main">11:30</span></div>
+      <div class="sb">
+        <h3 class="stop-title">前往東京大學</h3>
+        <div class="transit">總武線至秋葉原，轉丸之內線至本鄉三丁目，步行8分鐘　計20分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="3">
+      <div class="st"><span class="st-main">12:00</span><span class="st-end">— 12:30</span></div>
+      <div class="sb">
+        <span class="tag t-r">Lunch</span>
+        <h3 class="stop-title">東京大學中央食堂<small>Hongō Campus · Central Cafeteria</small></h3>
+        <p class="stop-desc">制度的截面，也是最誠實的午餐。安田講堂地下，對外開放。</p>
+        <div class="note"><strong>中央食堂</strong>　11:00–14:00　對外開放　現金為主　推薦「日替わり定食」¥500–700</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="4">
+      <div class="st"><span class="st-main">12:30</span><span class="st-end">— 14:00</span></div>
+      <div class="sb">
+        <span class="tag t-r">Academic</span>
+        <h3 class="stop-title">本鄉校區巡禮<small>安田講堂・三四郎池・銀杏大道・赤門</small></h3>
+        <p class="stop-desc">明治以降最高學府的空間秩序以磚石寫就。秋季銀杏大道開始轉色，三四郎池的水面倒映著江戶時代遺留的庭園骨架。</p>
+      </div>
+    </div>
+
+    <div class="stop is-transit" data-i="5">
+      <div class="st"><span class="st-main">14:00</span></div>
+      <div class="sb">
+        <h3 class="stop-title">前往東京都美術館</h3>
+        <div class="transit">從本鄉三丁目步行至上野公園　約18分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="6">
+      <div class="st"><span class="st-main">14:30</span><span class="st-end">— 16:00</span></div>
+      <div class="sb">
+        <span class="tag t-r">Art · Last Day</span>
+        <h3 class="stop-title">東京都美術館<small>大英博物館展「百花繚乱」最終日</small></h3>
+        <p class="stop-desc">歌麿、北齋、廣重版畫原作，以及散佚英國、青森、西雅圖三地逾150年的襖繪在此重聚。前川國男設計的館體本身亦是昭和建築史的一個節點。今日展覽永久閉幕。</p>
+        <div class="note"><strong>⚠ 展覽最終日</strong>　建議提前購票　開館 09:30　閉室 17:30　／　無票備案：上野公園其他場館</div>
+      </div>
+    </div>
+
+    <div class="stop is-transit" data-i="7">
+      <div class="st"><span class="st-main">16:00</span></div>
+      <div class="sb">
+        <h3 class="stop-title">前往日暮里</h3>
+        <div class="transit">步行或地鐵一站　約10分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="8">
+      <div class="st"><span class="st-main">16:15</span><span class="st-end">— 17:00</span></div>
+      <div class="sb">
+        <span class="tag t-r">Shopping</span>
+        <h3 class="stop-title">日暮里纖維街<small>Nippori Fabric Town</small></h3>
+        <p class="stop-desc">東京最密集的布料批發商圈，從高級和服面料到棉麻雜貨，在此壓縮於數百公尺的街道內。即使不購物，這條街本身就是一個關於「材質與工藝」的空間標本。</p>
+        <div class="note"><strong>多數店舖</strong>　10:00–18:00　週日公休（10/18週日，建議確認個別店家）</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="9">
+      <div class="st"><span class="st-main">17:00</span><span class="st-end">— 17:25</span></div>
+      <div class="sb">
+        <span class="tag t-r">Sweets</span>
+        <h3 class="stop-title">羽二重団子 日暮里駅前店<small>Habutae Dango · Nippori</small></h3>
+        <p class="stop-desc">創業200年以上，正岡子規・夏目漱石も愛した老舗団子。こし餡団子と白焼き団子の2本セット——香ばしい焼き目とあんこの品のある甘みは、纖維街歩きの後の最適な一停。日暮里駅前，步行即達。</p>
+      </div>
+    </div>
+
+    <div class="stop is-transit" data-i="10">
+      <div class="st"><span class="st-main">17:30</span></div>
+      <div class="sb">
+        <h3 class="stop-title">前往銀座</h3>
+        <div class="transit">銀座線至銀座　約15分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="11">
+      <div class="st"><span class="st-main">18:30</span><span class="st-end">— 19:30</span></div>
+      <div class="sb">
+        <span class="tag t-r">Dinner</span>
+        <h3 class="stop-title">資生堂 Parlour<small>Shiseido Parlour · Ginza</small></h3>
+        <p class="stop-desc">1902年創業，銀座最具歷史縱深的西洋料理空間。資生堂從化妝品跨界餐飲的制度設計，本身就是明治近代化的縮影。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="12">
+      <div class="st"><span class="st-main">19:30</span><span class="st-end">— 21:30</span></div>
+      <div class="sb">
+        <span class="tag t-m">Shopping</span>
+        <h3 class="stop-title">銀座散策<small>UNIQLO銀座旗艦 · 無印良品銀座 · 唐吉訶德</small></h3>
+        <p class="stop-desc">UNIQLO銀座全球旗艦（12層，11:00–21:00）、無印良品銀座旗艦（11:00–21:00）逛完後，唐吉訶德銀座店21:00後繼續——24小時營業，不設終點。</p>
+        <div class="transit">都營淺草線至淺草橋（APA）　約15分鐘</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ D2 ═══ -->
+<section class="day-section" id="d2">
+  <div class="day-head">
+    <div class="day-accent-bar d2-bar"></div>
+    <div class="day-head-info">
+      <div class="day-date">2026.10.19 Monday · 淺草・藏前・合羽橋・日本橋・丸之內</div>
+      <h2 class="day-title">下町 × 日本橋 × 丸之內</h2>
+      <div class="day-sub">信仰の回廊、抹茶の氷、水上の江戶、煉瓦の駅舎</div>
+    </div>
+  </div>
+  <div class="timeline">
+
+    <div class="stop" data-i="0">
+      <div class="st"><span class="st-main">07:30</span><span class="st-end">— 08:30</span></div>
+      <div class="sb">
+        <span class="tag t-g">Breakfast</span>
+        <h3 class="stop-title">APA早餐<small>APA Hotel No.232 Asakusabashi Ekikita</small></h3>
+        <p class="stop-desc">09:00 Airporter收件前吃完，輕裝出發。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="1">
+      <div class="st"><span class="st-main">09:00</span></div>
+      <div class="sb">
+        <span class="tag t-g">Luggage</span>
+        <h3 class="stop-title">Airporter 行李收件<small>APA Hotel No.232 Asakusabashi Ekikita</small></h3>
+        <p class="stop-desc">在APA淺草橋櫃檯讓Airporter收件，行李直送舞濱喜來登。今日輕裝出行，晚間21:00在喜來登領取。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="2">
+      <div class="st"><span class="st-main">09:00</span><span class="st-end">— 09:20</span></div>
+      <div class="sb">
+        <span class="tag t-g">Temple</span>
+        <h3 class="stop-title">淺草寺<small>Sensō-ji · Asakusa</small></h3>
+        <p class="stop-desc">走馬看花式地穿過。週一早晨捲簾剛拉起，香煙初升，人潮未至。不停留，只是讓這個城市的信仰空間成為今天的序章。</p>
+        <div class="transit">APA淺草橋步行至淺草寺　約15分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="3">
+      <div class="st"><span class="st-main">09:20</span><span class="st-end">— 09:35</span></div>
+      <div class="sb">
+        <span class="tag t-g">Shitamachi</span>
+        <h3 class="stop-title">浅草たぬき通り<small>12隻願かけ狸貓像・淺草仲見世南側</small></h3>
+        <p class="stop-desc">新仲見世南側的短小裏通，沿途12隻狸貓像分踞街燈柱上，各司其職——開運、夫婦、人情、必勝……摸肚子求開運，是淺草最安靜的一條旁道。舟和本店也在這條通り上。</p>
+        <div class="transit">從淺草寺步行　約2分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="4">
+      <div class="st"><span class="st-main">09:35</span><span class="st-end">— 10:00</span></div>
+      <div class="sb">
+        <span class="tag t-g">Shrine</span>
+        <h3 class="stop-title">藏前神社<small>Kuramae Jinja</small></h3>
+        <p class="stop-desc">藏前街區的小社，以精緻御朱印聞名。文具店與合羽橋10:00前尚未開門，這段時間在神社與隅田川邊慢慢走，讓藏前在喧囂前先被感受一次。</p>
+        <div class="transit">從たぬき通り步行至藏前　約10分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="5">
+      <div class="st"><span class="st-main">10:00</span><span class="st-end">— 11:00</span></div>
+      <div class="sb">
+        <span class="tag t-g">Kitchen</span>
+        <h3 class="stop-title">合羽橋道具街<small>Kappabashi Kitchenware Street</small></h3>
+        <p class="stop-desc">全日本最大廚具專業商圈，170間以上店舖密集於800公尺街道。刀具、陶器、食品模型、烘焙道具，任何與料理有關的事物都在這裡。釜淺商店的職人廚刀是代表性選擇。</p>
+        <div class="note"><strong>多數店舖</strong>　10:00–17:30　週日公休（10/19週一，正常營業）</div>
+        <div class="transit">從藏前神社步行　約10分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="6">
+      <div class="st"><span class="st-main">11:00</span><span class="st-end">— 11:30</span></div>
+      <div class="sb">
+        <span class="tag t-g">Matcha</span>
+        <h3 class="stop-title">壽々喜園 淺草本店<small>Suzukien · 世界最濃抹茶冰淇淋</small></h3>
+        <p class="stop-desc">1848年創業，江戶時代茶鋪老字號。與靜岡ななや聯名的7級濃度抹茶義式冰淇淋，7號使用農林水產大臣賞得獎茶葉，為全球最濃。開門即入可避開排隊人潮，售完提早打烊。</p>
+        <div class="note"><strong>11:00–17:00　不定休</strong>　淺草寺正後方　步行至たぬき通り約5分鐘</div>
+        <div class="transit">從合羽橋道具街步行　約10分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="7">
+      <div class="st"><span class="st-main">11:30</span><span class="st-end">— 12:30</span></div>
+      <div class="sb">
+        <span class="tag t-g">Lunch</span>
+        <h3 class="stop-title">たぬき通り周邊午餐<small>Asakusa · Lunch</small></h3>
+        <p class="stop-desc">たぬき通り上的とんかつ「ゆたか」（食べログ百名店，自家製パン粉，ロースかつ¥2,500）或もんじゃ焼き「ぽんぽこ」（1980年創業，下町らしい雰囲気），擇一而入。</p>
+        <div class="transit">從壽々喜園步行　約5分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop is-transit" data-i="8">
+      <div class="st"><span class="st-main">12:30</span></div>
+      <div class="sb">
+        <h3 class="stop-title">前往日暮里</h3>
+        <div class="transit">地鐵至日暮里　約20分鐘　13:00前抵達</div>
+      </div>
+    </div>
+    <div class="stop" data-i="9">
+      <div class="st"><span class="st-main">13:00</span><span class="st-end">— 14:00</span></div>
+      <div class="sb">
+        <span class="tag t-g">Fabric</span>
+        <h3 class="stop-title">日暮里纖維街<small>Nippori Fabric Town</small></h3>
+        <p class="stop-desc">東京最密集的布料批發商圈，從高級和服面料到棉麻雜貨，在此壓縮於數百公尺的街道內。即使不購物，這條街本身就是一個關於「材質與工藝」的空間標本。</p>
+        <div class="transit">從日暮里站步行即達</div>
+      </div>
+    </div>
+
+    <div class="stop is-transit" data-i="9">
+      <div class="st"><span class="st-main">12:30</span></div>
+      <div class="sb">
+        <h3 class="stop-title">前往日本橋</h3>
+        <div class="transit">地鐵至日本橋　約20分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="10">
+      <div class="st"><span class="st-main">13:00</span><span class="st-end">— 14:00</span></div>
+      <div class="sb">
+        <span class="tag t-g">Cruise</span>
+        <h3 class="stop-title">日本橋クルーズ 60分<small>お江戸TOKYO 60分コース · 日本橋船着場</small></h3>
+        <p class="stop-desc">日本橋たもとの滝の広場から出航。日本橋川・神田川・隅田川を巡り、江戸城石垣、30以上の橋、スカイツリーを水上から体験。リバーガイドの解説付き。首都高地下化工事で失われる前の景観を今のうちに。</p>
+        <div class="note"><strong>大人約¥2,500–3,000</strong>　事前予約推薦　水曜公休　潮位により出港時間が毎日変動　10月スケジュールは8月10日公開</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="11">
+      <div class="st"><span class="st-main">14:15</span><span class="st-end">— 16:00</span></div>
+      <div class="sb">
+        <span class="tag t-g">Shopping</span>
+        <h3 class="stop-title">日本橋<small>三越・高島屋S.C.・小倉山莊・福德神社・COREDO室町</small></h3>
+        <p class="stop-desc">日本橋三越本店（1914年起，1935年現建築）、高島屋の小倉山莊（京都菓子）、福德神社の江戶下町信仰遺跡，COREDO室町の當代商業更新。日本橋在此完成了從江戶到現代的壓縮敘事。</p>
+      </div>
+    </div>
+
+    <div class="stop is-transit" data-i="12">
+      <div class="st"><span class="st-main">16:15</span></div>
+      <div class="sb">
+        <h3 class="stop-title">前往丸之內・東京車站</h3>
+        <div class="transit">步行約15分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="13">
+      <div class="st"><span class="st-main">16:30</span><span class="st-end">— 18:00</span></div>
+      <div class="sb">
+        <span class="tag t-r">Architecture</span>
+        <h3 class="stop-title">東京車站丸之內・丸之內仲通<small>Tokyo Station · Marunouchi</small></h3>
+        <p class="stop-desc">辰野金吾1914年設計的紅磚站舍，修復後在夜間照明下呈現最完整的帝國建築語法。丸之內仲通的行道樹在秋季開始轉色，與燈光共同構成東京最具儀式感的夜間街景。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="14">
+      <div class="st"><span class="st-main">18:00</span><span class="st-end">— 19:30</span></div>
+      <div class="sb">
+        <span class="tag t-g">Dinner</span>
+        <h3 class="stop-title">東京車站周邊晚餐<small>Gransta · 丸之內仲通</small></h3>
+        <p class="stop-desc">東京車站Gransta或丸之內仲通餐廳選擇豐富，從和食到洋食皆有。上班族退潮後的丸之內在此時最安靜，適合在此收尾一天。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="15">
+      <div class="st"><span class="st-main">19:30</span><span class="st-end">— 21:00</span></div>
+      <div class="sb">
+        <span class="tag t-g">Check-in</span>
+        <h3 class="stop-title">前往舞濱・喜來登領行李<small>Sheraton Grande Tokyo Bay Hotel · Maihama</small></h3>
+        <p class="stop-desc">今晚起換宿舞濱。Airporter行李已於早上09:00從APA淺草橋寄出，21:00在喜來登櫃檯領取，辦理入住。</p>
+        <div class="transit">東京站 → JR京葉線至舞濱　約20分鐘</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ D3 ═══ -->
+<section class="day-section" id="d3">
+  <div class="day-head">
+    <div class="day-accent-bar d3-bar"></div>
+    <div class="day-head-info">
+      <div class="day-date">2026.10.20 Tuesday · 兵分二路</div>
+      <h2 class="day-title">各赴其境</h2>
+      <div class="day-sub">DisneySea × Disneyland · 同站下車，各走各的園</div>
+    </div>
+  </div>
+  <div class="disney-wrap">
+    <div class="disney-card">
+      <div class="disney-icon">🏰</div>
+      <h3 class="disney-h">各赴其境・同在舞濱</h3>
+      <p class="disney-p">
+        06:30 喜來登早餐<br><br>
+        你 → 東京迪士尼海洋 DisneySea<br>
+        妹 → 東京迪士尼樂園 Disneyland<br><br>
+        喜來登步行至舞濱站，DisneySea與Disneyland各自入園。<br>
+        同在舞濱，各走各的園，傍晚會合。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ D4 ═══ -->
+<section class="day-section" id="d4">
+  <div class="day-head">
+    <div class="day-accent-bar d4-bar"></div>
+    <div class="day-head-info">
+      <div class="day-date">2026.10.21 Wednesday · 回程</div>
+      <h2 class="day-title">帰途</h2>
+      <div class="day-sub">舞濱最後的早晨、成田出發</div>
+    </div>
+  </div>
+  <div class="timeline">
+
+    <div class="stop" data-i="0">
+      <div class="st"><span class="st-main">08:30</span><span class="st-end">— 09:30</span></div>
+      <div class="sb">
+        <span class="tag t-d">Breakfast</span>
+        <h3 class="stop-title">喜來登早餐<small>Sheraton Grande Tokyo Bay Hotel</small></h3>
+        <p class="stop-desc">最後一頓飯店早餐，不必趕。11:00退房前從容吃完。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="1">
+      <div class="st"><span class="st-main">上午</span></div>
+      <div class="sb">
+        <span class="tag t-d">Morning</span>
+        <h3 class="stop-title">舞濱最後的早晨<small>Maihama · Last Morning</small></h3>
+        <p class="stop-desc">上午留白，隨機應變。喜來登附近就是DisneySea入口，早晨的舞濱在人潮湧入前有它自己的安靜。</p>
+      </div>
+    </div>
+
+    <div class="stop" data-i="2">
+      <div class="st"><span class="st-main">12:00</span></div>
+      <div class="sb">
+        <span class="tag t-d">Check-out</span>
+        <h3 class="stop-title">喜來登退房<small>Sheraton Grande Tokyo Bay Hotel · Check-out</small></h3>
+        <p class="stop-desc">退房，拖著行李前往舞濱站，搭JR京葉線至東京站，轉N'EX前往成田。</p>
+        <div class="transit">舞濱 → JR京葉線至東京站，轉N'EX至成田　約90分鐘</div>
+      </div>
+    </div>
+
+    <div class="stop" data-i="3">
+      <div class="st"><span class="st-main">14:30</span></div>
+      <div class="sb">
+        <span class="tag t-r">Departure</span>
+        <h3 class="stop-title">成田出發<small>Narita Airport · NRT → TPE</small></h3>
+        <p class="stop-desc">NRT 14:30起飛，TPE 17:15抵達。東京在這裡結束，或者說，在這裡暫停。</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <span>Tokyo · October 2026 · APA Asakusabashi · Sheraton Grande Tokyo Bay</span>
+  <span>🦊</span>
+</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+  document.getElementById('bar').style.transform = `scaleX(${p})`;
+}, { passive: true });
+
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const delay = parseInt(e.target.dataset.i || 0) * 60;
+    setTimeout(() => e.target.classList.add('vis'), delay);
+    io.unobserve(e.target);
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+document.querySelectorAll('.stop').forEach(el => io.observe(el));
+
+// Active tab
+const tabs = document.querySelectorAll('.day-tab');
+const sections = [...document.querySelectorAll('.day-section')];
+const navLinks = document.querySelectorAll('.nav-links a');
+
+const onScroll = () => {
+  const y = window.scrollY + 120;
+  let cur = sections[0].id;
+  sections.forEach(s => { if (y >= s.offsetTop) cur = s.id; });
+  tabs.forEach(t => t.classList.toggle('on', t.getAttribute('href') === '#' + cur));
+  navLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + cur));
+};
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+</script>
+</body>
+</html>
