@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>東京五日 · October 2026</title>
+<title>下町日和 · October 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+TC:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 /* ── TOKENS ── */
@@ -30,6 +30,7 @@ html { scroll-behavior:smooth; font-size:16px; }
 body { background:var(--p); color:var(--ink); font-family:'Cormorant Garamond','Noto Serif TC',serif; line-height:1.65; -webkit-font-smoothing:antialiased; }
 
 /* ── PROGRESS ── */
+/* aria-hidden="true" 已於HTML標注，視覺裝飾不需螢幕閱讀器讀取 */
 #bar { position:fixed; top:0; left:0; height:2px; background:var(--d1); transform-origin:left; transform:scaleX(0); transition:transform .08s linear; z-index:999; }
 
 /* ── NAV ── */
@@ -240,9 +241,54 @@ footer {
   .hero-meta { grid-template-columns:1fr 1fr; gap:1rem; }
   .day-head { padding:2rem 1.5rem 1.5rem; }
   .timeline { padding:0 1.5rem 3rem; }
+
+  /* RWD時間軸：時間欄縮窄，防止換行 */
   .stop { grid-template-columns:72px 1fr; gap:1.2rem; }
+  .st-main { font-size:1.2rem; }
+  .st-end { font-size:.55rem; }
+
   .disney-wrap { padding:2rem 1.5rem; }
   footer { padding:2rem 1.5rem; flex-direction:column; gap:.8rem; text-align:center; }
+}
+
+/* 480px以下：時間移至標題上方，修正置中與裁切問題 */
+@media (max-width:480px) {
+  .timeline { padding:0 1.2rem 2.5rem; }
+  .day-head { padding:1.5rem 1.2rem; }
+
+  .stop {
+    grid-template-columns:1fr;
+    gap:.4rem;
+  }
+  .st {
+    text-align:left;
+    display:flex;
+    align-items:baseline;
+    gap:.4rem;
+    padding-top:0;
+  }
+  .st-main {
+    font-size:1rem;
+    font-style:italic;
+    color:var(--lt);
+  }
+  .st-end {
+    display:inline;
+    font-size:.6rem;
+    margin-top:0;
+  }
+  .stop-title {
+    font-size:1rem;
+  }
+  .stop-desc {
+    font-size:.82rem;
+    max-width:100%;
+  }
+  .transit {
+    font-size:.68rem;
+    white-space:normal;
+    word-break:break-all;
+  }
 }
 
 /* ── ENTRANCE ── */
@@ -254,10 +300,10 @@ footer {
 </style>
 </head>
 <body>
-<div id="bar"></div>
+<div id="bar" role="progressbar" aria-hidden="true" aria-label="閱讀進度"></div>
 
-<nav>
-  <span class="nav-logo">東京五日</span>
+<nav aria-label="日期導覽">
+  <span class="nav-logo">下町日和</span>
   <div class="nav-links">
     <a href="#d0" data-s="d0">10.17</a>
     <a href="#d1" data-s="d1">10.18</a>
@@ -271,7 +317,7 @@ footer {
 <header class="hero">
   <div class="hero-main">
     <div class="hero-eyebrow">ANO Hotel Asakusa · Sheraton Grande Tokyo Bay · October 2026</div>
-    <h1>東京<br>五日<span class="hero-en">Tōkyō · Five Days · October 2026</span></h1>
+    <h1>下町日和<span class="hero-en">Shitamachi Biyori · October 2026</span></h1>
     <div class="hero-rule"></div>
   </div>
   <div class="hero-meta">
@@ -283,12 +329,12 @@ footer {
 </header>
 
 <!-- TABS -->
-<div class="day-tabs">
-  <a href="#d0" class="day-tab" data-accent="d0">0 · 10.17 抵達</a>
-  <a href="#d1" class="day-tab" data-accent="d1">I · 10.18 文京</a>
-  <a href="#d2" class="day-tab" data-accent="d2">II · 10.19 下町</a>
-  <a href="#d3" class="day-tab" data-accent="d3">III · 10.20 Disney</a>
-  <a href="#d4" class="day-tab" data-accent="d4">IV · 10.21 回程</a>
+<div class="day-tabs" role="tablist" aria-label="行程日期">
+  <a href="#d0" class="day-tab" data-accent="d0" role="tab" aria-selected="false">0 · 10.17 抵達</a>
+  <a href="#d1" class="day-tab" data-accent="d1" role="tab" aria-selected="false">I · 10.18 文京</a>
+  <a href="#d2" class="day-tab" data-accent="d2" role="tab" aria-selected="false">II · 10.19 下町</a>
+  <a href="#d3" class="day-tab" data-accent="d3" role="tab" aria-selected="false">III · 10.20 Disney</a>
+  <a href="#d4" class="day-tab" data-accent="d4" role="tab" aria-selected="false">IV · 10.21 回程</a>
 </div>
 
 <!-- ═══ D0 ═══ -->
@@ -632,8 +678,8 @@ footer {
       <div class="sb">
         <span class="tag t-g">Optional · Supper</span>
         <h3 class="stop-title">Sheraton Late Night · Check-in<small>Sheraton Grande Tokyo Bay Hotel</small></h3>
-        <p class="stop-desc">Check-in、領取Airporter行李後，依當下飢餓程度決定：A｜Toastina——輕食・甜點・咖啡・簡單鹹食；B｜Galleria Café——較完整的餐點；C｜完全不餓，直接回房整理行李・洗澡・休息。隔天06:30早餐，今晚刻意保留為整天的緩衝區，不製造新的時間錨點。</p>
-        <div class="note">不預約　不設硬性時間　依飢餓程度與體力自行決定　21:00 Airporter行李送達取件</div>
+        <p class="stop-desc">Check-in後依飢餓程度決定：Toastina（輕食甜點）、Galleria Café（較正式餐點）、或直接回房休息。隔天06:30早餐，今晚不設時間錨點。</p>
+        <div class="note">21:00 Airporter行李送達取件</div>
       </div>
     </div>
   </div>
@@ -722,13 +768,13 @@ footer {
 </footer>
 
 <script>
-// Progress bar
+// ── 進度條 ──
 window.addEventListener('scroll', () => {
   const p = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
   document.getElementById('bar').style.transform = `scaleX(${p})`;
 }, { passive: true });
 
-// Scroll reveal
+// ── 捲動顯示動畫 ──
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (!e.isIntersecting) return;
@@ -739,7 +785,7 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
 document.querySelectorAll('.stop').forEach(el => io.observe(el));
 
-// Active tab
+// ── 活躍標籤（含aria-selected同步）──
 const tabs = document.querySelectorAll('.day-tab');
 const sections = [...document.querySelectorAll('.day-section')];
 const navLinks = document.querySelectorAll('.nav-links a');
@@ -748,11 +794,54 @@ const onScroll = () => {
   const y = window.scrollY + 120;
   let cur = sections[0].id;
   sections.forEach(s => { if (y >= s.offsetTop) cur = s.id; });
-  tabs.forEach(t => t.classList.toggle('on', t.getAttribute('href') === '#' + cur));
+
+  tabs.forEach(t => {
+    const isActive = t.getAttribute('href') === '#' + cur;
+    t.classList.toggle('on', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false'); /* ARIA同步 */
+  });
   navLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + cur));
 };
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
+
+// ── Google Maps 連結自動注入 ──
+/* 各景點名稱與對應Google Maps搜尋關鍵字 */
+const mapsData = {
+  '淺草寺': '浅草寺 東京',
+  '浅草たぬき通り': '浅草たぬき通り',
+  '藏前神社': '藏前神社 東京',
+  '合羽橋道具街': '合羽橋道具街 東京',
+  '壽々喜園 淺草本店': '寿々喜園 浅草',
+  'とんかつ ゆたか': 'とんかつ ゆたか 浅草',
+  '谷中銀座': '谷中銀座 東京',
+  '羽二重団子 日暮里駅前店': '羽二重団子 日暮里',
+  '資生堂 Parlour': '資生堂パーラー 銀座',
+  '日本橋': '日本橋 東京',
+  'THE GINZA LOUNGE（MATSUYA GINZA JCB）': 'THE GINZA LOUNGE 松屋銀座',
+  'KITTE丸之內': 'KITTE丸の内',
+  '丸之內仲通夜景': '丸の内仲通り',
+  '東京大學中央食堂': '東京大学中央食堂',
+  '東京都美術館': '東京都美術館 上野',
+  '酒の美術館 東武淺草站地下街店': '酒の美術館 浅草',
+};
+
+document.querySelectorAll('.stop-title').forEach(el => {
+  const text = el.firstChild?.textContent?.trim();
+  if (!text || !mapsData[text]) return;
+  const q = encodeURIComponent(mapsData[text]);
+  const url = `https://www.google.com/maps/search/?api=1&query=${q}`;
+  /* 包裝景點名為可點擊連結，保留原有樣式 */
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.style.cssText = 'color:inherit;text-decoration:none;border-bottom:1px dotted var(--lt);';
+  a.title = `在 Google Maps 開啟：${text}`;
+  const firstText = el.firstChild;
+  el.insertBefore(a, firstText);
+  a.appendChild(firstText);
+});
 </script>
 </body>
 </html>
